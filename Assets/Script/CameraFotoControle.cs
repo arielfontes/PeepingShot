@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class CameraFotoControle : MonoBehaviour {
 	public Camera cameraFoto;
@@ -22,6 +23,7 @@ public class CameraFotoControle : MonoBehaviour {
 		
 		if (takeShot && Input.GetMouseButtonDown(0)) {
 			Application.CaptureScreenshot(ScreenShotName());
+			AssetDatabase.Refresh();
 			Debug.Log(string.Format("Took screenshot"));
 		}
 	}

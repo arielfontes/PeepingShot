@@ -3,12 +3,13 @@ using System.Collections;
 using System.IO;
 using UnityEditor;
 using System.Collections.Generic;
+using System;
 
 public class AlbumFotos : MonoBehaviour {
 
 	private IList<Texture2D> fotos;
 	private int listaIndex = 1;
-	public Camera camera;
+	public Camera cameraFPS;
 	
 	void Start () {
 		renderer.enabled = false;
@@ -23,18 +24,26 @@ public class AlbumFotos : MonoBehaviour {
 
 	private void carregaFotos(){
 		fotos = new List<Texture2D>();
-		string[] aNomeFotos = Directory.GetFiles("Assets/ScreenShots", "*.png", SearchOption.AllDirectories);
+		string[] aNomeFotos = Directory.GetFiles("Assets/ScreenShots", "*.png");
 		foreach(string matFile in aNomeFotos){
 			string assetPath = matFile.Replace("Assets/ScreenShots/", "").Replace('\\', '/');
 			Texture2D sourceMat = (Texture2D)AssetDatabase.LoadAssetAtPath(assetPath, typeof(Texture2D));
 			fotos.Add(sourceMat);
 		}
-		renderer.material.mainTexture = fotos[0];
+		try{
+			renderer.material.mainTexture = fotos[0];
+			Debug.Log("fotos][0");
+		}catch (ArgumentOutOfRangeException){
+			Texture2D sourceMat = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/ScreenShots/noImage/noImageAvailable.png", typeof(Texture2D));
+			renderer.material.mainTexture = sourceMat;
+			Debug.Log("catch");
+		}
 	}
 
 	private void exibeAlbum(){
 		if (Input.GetKeyDown(KeyCode.M)){
-			camera.enabled = !camera.enabled;
+			carregaFotos();
+			cameraFPS.enabled = !cameraFPS.enabled;
 			renderer.enabled = !renderer.enabled;
 		}
 	}

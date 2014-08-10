@@ -5,6 +5,9 @@
 // Does this script currently respond to input?
 var canControl : boolean = true;
 
+var cameraFPS : Camera;
+var cameraAlbum : Camera;
+
 var useFixedUpdate : boolean = true;
 
 // For the next variables, @System.NonSerialized tells Unity to not serialize the variable or show it in the inspector view.
@@ -305,6 +308,14 @@ private function UpdateFunction () {
 		// Support moving platform rotation as well:
         movingPlatform.activeGlobalRotation = tr.rotation;
         movingPlatform.activeLocalRotation = Quaternion.Inverse(movingPlatform.activePlatform.rotation) * movingPlatform.activeGlobalRotation; 
+	}
+	
+	// trava o movimento quando primeira pessoa ativado
+	// ou album de fotos ativado
+	if (cameraFPS.enabled == true || cameraAlbum.enabled == true){
+		canControl = false;
+	}else{
+		canControl = true;
 	}
 }
 
