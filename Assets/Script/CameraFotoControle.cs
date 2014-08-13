@@ -41,7 +41,6 @@ public class CameraFotoControle : MonoBehaviour {
 
 	// teste outro screenshot
 	void tiraFoto2() {
-		takeShot |= Input.GetKeyDown("k");
 		if (takeShot) {
 			RenderTexture rt = new RenderTexture(resWidth, resHeight, 24);
 			cameraFoto.targetTexture = rt;
