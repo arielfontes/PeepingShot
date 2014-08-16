@@ -14,8 +14,8 @@ public class AlbumFotos : MonoBehaviour {
 		renderer.enabled = false;
 		carregaFotos();
 
-		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "/ScreenShots");
-		Debug.Log(Application.persistentDataPath);
+		System.IO.Directory.CreateDirectory(Application.dataPath + "/ScreenShots");
+		Debug.Log(Application.dataPath);
 	}
 
 	void Update () {
@@ -43,7 +43,6 @@ public class AlbumFotos : MonoBehaviour {
 			}
 
 			renderer.material.mainTexture = fotos[0];
-			Debug.Log("fotos][0");
 		}catch (ArgumentOutOfRangeException){
 			renderer.material.mainTexture = (Texture2D)Resources.Load("noImageAvailable", typeof(Texture2D));
 			Debug.Log("nao tem imagem");
