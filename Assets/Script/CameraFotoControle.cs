@@ -10,7 +10,7 @@ public class CameraFotoControle : MonoBehaviour {
 	public int resHeight = 620;
 		
 	void Update() {
-		tiraFoto();
+		preparaCameraTiraFoto();
 	}
 
 	/// <summary>
@@ -18,7 +18,7 @@ public class CameraFotoControle : MonoBehaviour {
 	/// for apertado. permitindo tirar foto.
 	/// se apertar novamente. sai da 1pessoa. 
 	/// </summary>
-	private void tiraFoto(){
+	private void preparaCameraTiraFoto(){
 		if (Input.GetMouseButtonDown(1)){
 			takeShot = !takeShot;
 		}
@@ -26,21 +26,25 @@ public class CameraFotoControle : MonoBehaviour {
 		
 		if (takeShot && Input.GetMouseButtonDown(0)) {
 //			Application.CaptureScreenshot(ScreenShotName());
-			tiraFoto2();
-			Debug.Log(string.Format("Took screenshot"));
+			StartCoroutine(tiraFoto());
 		}
 	}
 
 	/// <summary>
 	/// retorna caminho onde sera salvo o screenshot e nome.
 	/// </summary>
-	/// <returns>The shot name.</returns>
+	/// <returns>nome e caminho do arquivo.</returns>
 	public static string ScreenShotName() {
 		return string.Format("{0}/screenshots/screen_{1}.png", Application.dataPath, System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
 	}
 
-	// teste outro screenshot
-	void tiraFoto2() {
+	/// <summary>
+	/// Metodo captura todos os bytes de um frame
+	/// e salva em um arquivo png. 
+	/// </summary>
+	/// <returns> IEnumerator </returns>
+	IEnumerator tiraFoto() {
+		yield return new WaitForEndOfFrame();
 		if (takeShot) {
 			RenderTexture rt = new RenderTexture(resWidth, resHeight, 24);
 			cameraFoto.targetTexture = rt;
@@ -49,21 +53,12 @@ public class CameraFotoControle : MonoBehaviour {
 			RenderTexture.active = rt;
 			screenShot.ReadPixels(new Rect(0, 0, resWidth, resHeight), 0, 0);
 			cameraFoto.targetTexture = null;
-			RenderTexture.active = null; // JC: added to avoid errors
+			RenderTexture.active = null;
 			Destroy(rt);
 			byte[] bytes = screenShot.EncodeToPNG();
-			string filename = ScreenShotName2(resWidth, resHeight);
-			System.IO.File.WriteAllBytes(filename, bytes);
-			Debug.Log(string.Format("Took screenshot to: {0}", filename));
-			takeShot = false;
+			System.IO.File.WriteAllBytes(ScreenShotName(), bytes);
+			Debug.Log(string.Format("Took screenshot to: {0}", ScreenShotName()));
 		}
-	}
-
-	public static string ScreenShotName2(int width, int height) {
-		return string.Format("{0}/screenshots/screen_{1}x{2}_{3}.png",
-		                     Application.dataPath,
-		                     width, height,
-		                     System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
 	}
 	
 }
