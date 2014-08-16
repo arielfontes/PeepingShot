@@ -1,4 +1,4 @@
-projeto
+Peeping Shot
 =======
 
-Projeto final do curso de Game Development
+Projeto final do curso de Game Development - 2014
